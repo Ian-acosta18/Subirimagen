@@ -1,4 +1,4 @@
-package com.example.subirimagen; // Corregido (una sola 'i')
+package com.example.subirimagen;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Asegúrate de que la clase se llame igual (ver paso 4)
-        ClaudinaryConfiguracion.init(this);
+        // Inicialización corregida
+        CloudinaryConfiguracion.init(this);
 
         imgPreview = findViewById(R.id.imgPreview);
         btnSeleccionar = findViewById(R.id.btnSeleccionar);
@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
 
         MediaManager.get().upload(imagenUri)
-                .unsigned("cazojzj8") // Tu preset unsigned
-                .option("folder", "mi_carpeta") // Carpeta opcional
+                .unsigned("cazojzj8")
+                .option("folder", "mi_carpeta")
                 .callback(new UploadCallback() {
                     @Override
                     public void onStart(String requestId) {}
@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                         String url = resultData.get("secure_url").toString();
                         Log.d("Cloudinary", "URL subida: " + url);
 
-                        // Guardar URL en Firebase
                         String key = databaseReference.push().getKey();
                         if (key != null) {
                             databaseReference.child(key).setValue(url);

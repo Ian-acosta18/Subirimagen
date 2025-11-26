@@ -36,8 +36,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // IMPORTANTE: Inicializar Cloudinary aquí también por si acaso
-        ClaudinaryConfiguracion.init(this);
+        // Inicialización corregida
+        CloudinaryConfiguracion.init(this);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
@@ -82,14 +82,13 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // 1. Subir foto a Cloudinary
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Creando perfil...");
         dialog.setCancelable(false);
         dialog.show();
 
         MediaManager.get().upload(imageUri)
-                .unsigned("cazojzj8") // TU PRESET
+                .unsigned("cazojzj8")
                 .option("folder", "perfiles_usuarios")
                 .callback(new UploadCallback() {
                     @Override
@@ -100,8 +99,6 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String requestId, Map resultData) {
                         String fotoUrl = resultData.get("secure_url").toString();
-
-                        // 2. Crear usuario en Firebase Auth
                         crearUsuarioFirebase(email, pass, name, fotoUrl, dialog);
                     }
 
@@ -121,8 +118,6 @@ public class RegisterActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
-
-                        // 3. Guardar datos extra en Realtime Database
                         Map<String, Object> map = new HashMap<>();
                         map.put("nombre", name);
                         map.put("email", email);
