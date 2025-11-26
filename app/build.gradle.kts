@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.subirimagen"
-    compileSdk = 36 // OBLIGATORIO: Cambiado de 34 a 36
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.subirimagen"
         minSdk = 24
-        targetSdk = 36 // RECOMENDADO: Cambiado de 34 a 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -37,12 +37,14 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.firebase.database)
 
-    // Librerías de imágenes
-    implementation("com.cloudinary:cloudinary-android:2.5.0")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("com.google.firebase:firebase-auth")
+    // Firebase
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.auth)
+
+    // Imágenes
+    implementation(libs.cloudinary)
+    implementation(libs.glide)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
