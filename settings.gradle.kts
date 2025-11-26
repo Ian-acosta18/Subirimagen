@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Subir imagen"
 include(":app")
- 

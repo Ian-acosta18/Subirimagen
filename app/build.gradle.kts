@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.google.gms.google.services) apply false
 }
 
 android {
@@ -42,4 +44,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.cloudinary:cloudinary-android:3.1.1")
+
 }

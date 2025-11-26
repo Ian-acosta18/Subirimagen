@@ -1,52 +1,4 @@
-Ir al contenido principal
-        Google Classroom
-        Classroom
-        Desarrollo de Aplicaciones Móviles
-        Inicio
-        Calendar
-        Cursos en los que te has inscrito
-        Tareas pendientes
-        A
-        A-ESTRUCTURA DE DATOS
-        EDA_19_24
-        C
-        Cálculo de Varias Variables O25
-        F
-        Fundamentos Matemáticos
-        1-C TIID
-        D
-        Desarrollo de Aplicaciones Móviles
-        T
-        Tutoría Gen2024
-        sep-dic24
-        Clases archivadas
-        Ajustes
-        Subir una imagen a la base de datos
-        Subir una imagen a la base de datos
-        Yesenia Pérez Reyes
-        •
-        11:36
-        100 puntos
-        activity_mostrar.xml
-        XML
-
-        Mostrar.java
-        Java
-
-        activity_main.xml
-        XML
-
-        MainActivity.java
-        Java
-
-        ClaudinaryConfiguracion.java
-        Java
-
-        Comentarios de la clase
-        Tu trabajo
-        Asignado
-        Comentarios privados
-        package com.example.subiirimagenes;
+package com.example.subirimagen; // Paquete corregido
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -83,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // INICIALIZAR CLOUDINARY
+        // Asegúrate de que la clase se llame ClaudinaryConfiguracion
         ClaudinaryConfiguracion.init(this);
 
         imgPreview = findViewById(R.id.imgPreview);
@@ -145,7 +98,9 @@ public class MainActivity extends AppCompatActivity {
 
                         // Guardar URL en Firebase
                         String key = databaseReference.push().getKey();
-                        databaseReference.child(key).setValue(url);
+                        if (key != null) {
+                            databaseReference.child(key).setValue(url);
+                        }
 
                         dialog.dismiss();
                         Toast.makeText(MainActivity.this, "Imagen subida correctamente", Toast.LENGTH_LONG).show();
@@ -163,5 +118,3 @@ public class MainActivity extends AppCompatActivity {
                 .dispatch();
     }
 }
-MainActivity.java
-Mostrando MainActivity.java.
