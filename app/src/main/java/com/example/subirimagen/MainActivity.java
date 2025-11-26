@@ -1,4 +1,4 @@
-package com.example.subirimagen; // Paquete corregido
+package com.example.subirimagen; // Corregido (una sola 'i')
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // INICIALIZAR CLOUDINARY
-        // Asegúrate de que la clase se llame ClaudinaryConfiguracion
+        // Asegúrate de que la clase se llame igual (ver paso 4)
         ClaudinaryConfiguracion.init(this);
 
         imgPreview = findViewById(R.id.imgPreview);
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
 
         MediaManager.get().upload(imagenUri)
-                .unsigned("ezmy0qai") // Tu preset unsigned
+                .unsigned("cazojzj8") // Tu preset unsigned
                 .option("folder", "mi_carpeta") // Carpeta opcional
                 .callback(new UploadCallback() {
                     @Override

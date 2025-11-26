@@ -1,4 +1,4 @@
-package com.example.subirimagen; // Paquete corregido
+package com.example.subirimagen; // Corregido el paquete
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.*;
 
-public class Mostrar extends AppCompatActivity {
+public class Mostrar extends AppCompatActivity { // Nombre de clase con Mayúscula
 
     LinearLayout contenedor;
 
@@ -32,12 +32,11 @@ public class Mostrar extends AppCompatActivity {
                         for (DataSnapshot ds : snapshot.getChildren()){
                             String url = ds.getValue(String.class);
 
-                            if (url != null) {
+                            if (url != null) { // Verificación de nulo
                                 ImageView img = new ImageView(Mostrar.this);
                                 img.setAdjustViewBounds(true);
                                 img.setPadding(10,10,10,10);
 
-                                // Cargar imagen con Glide
                                 Glide.with(Mostrar.this).load(url).into(img);
 
                                 contenedor.addView(img);

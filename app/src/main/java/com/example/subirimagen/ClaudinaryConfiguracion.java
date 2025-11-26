@@ -1,4 +1,4 @@
-package com.example.subirimagen; // Paquete corregido
+package com.example.subirimagen; // Corregido el paquete
 
 import android.content.Context;
 import com.cloudinary.android.MediaManager;
@@ -12,10 +12,8 @@ public class ClaudinaryConfiguracion {
         if (initialized) return;
 
         Map<String, String> config = new HashMap<>();
-        config.put("cloud_name", "dfepwnerh"); // tu cloud_name de Cloudinary
-        config.put("api_key", "123456789012345"); // REEMPLAZA ESTO CON TU API KEY REAL SI ES NECESARIO
-        // Nota: Para subidas "unsigned", a veces no se requiere api_key en el cliente,
-        // pero si te da error, verifica tu consola de Cloudinary.
+        config.put("cloud_name", "dh3ytvnwf");
+        config.put("api_key", "346822317582425");
 
         MediaManager.init(context, config);
         initialized = true;
