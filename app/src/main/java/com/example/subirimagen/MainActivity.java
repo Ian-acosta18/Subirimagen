@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Inicialización corregida
-        CloudinaryConfiguracion.init(this);
+        ClaudinaryConfiguracion.init(this);
 
         imgPreview = findViewById(R.id.imgPreview);
         btnSeleccionar = findViewById(R.id.btnSeleccionar);

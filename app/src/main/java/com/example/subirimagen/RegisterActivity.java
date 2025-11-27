@@ -37,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         // Inicialización corregida
-        CloudinaryConfiguracion.init(this);
+        ClaudinaryConfiguracion.init(this);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
