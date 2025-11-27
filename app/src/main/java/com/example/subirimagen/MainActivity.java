@@ -34,15 +34,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Inicialización de la configuración de Cloudinary
-        ClaudinaryConfiguracion.init(this);
+        // Inicialización de Cloudinary
+        try {
+            ClaudinaryConfiguracion.init(this);
+        } catch (Exception e) {
+            Log.e("Config", "Error iniciando Cloudinary", e);
+        }
 
         imgPreview = findViewById(R.id.imgPreview);
         btnSeleccionar = findViewById(R.id.btnSeleccionar);
         btnSubir = findViewById(R.id.btnSubir);
         btnVerImagen = findViewById(R.id.btnVerImagen);
 
-        // Referencia a la base de datos Realtime Database
+        // Referencia a Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference("imagenes");
 
         btnSeleccionar.setOnClickListener(v -> abrirGaleria());
@@ -69,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void subirCloudinary() {
-
         if(imagenUri == null){
             Toast.makeText(this, "Selecciona una imagen primero", Toast.LENGTH_SHORT).show();
             return;
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Subiendo a Cloudinary...");
-        dialog.setCancelable(false); // Evita que el usuario cancele tocando fuera
+        dialog.setCancelable(false); // Evita cancelaciones accidentales
         dialog.show();
 
         MediaManager.get().upload(imagenUri)
@@ -85,58 +88,59 @@ public class MainActivity extends AppCompatActivity {
                 .option("folder", "mi_carpeta")
                 .callback(new UploadCallback() {
                     @Override
-                    public void onStart(String requestId) {
-                        // Opcional: acciones al iniciar
-                    }
+                    public void onStart(String requestId) { }
 
                     @Override
-                    public void onProgress(String requestId, long bytes, long totalBytes) {
-                        // Opcional: actualizar barra de progreso
-                    }
+                    public void onProgress(String requestId, long bytes, long totalBytes) { }
 
                     @Override
                     public void onSuccess(String requestId, Map resultData) {
-                        // Obtener la URL de la imagen subida
-                        String url = resultData.get("secure_url").toString();
-                        Log.d("Cloudinary", "URL subida: " + url);
+                        // 1. Procesar datos (esto puede ir en segundo plano)
+                        String url = "";
+                        if (resultData != null && resultData.get("secure_url") != null) {
+                            url = resultData.get("secure_url").toString();
+                            Log.d("Cloudinary", "URL subida: " + url);
 
-                        // Guardar la URL en Firebase Database
-                        String key = databaseReference.push().getKey();
-                        if (key != null) {
-                            databaseReference.child(key).setValue(url);
+                            // Guardar en Firebase
+                            String key = databaseReference.push().getKey();
+                            if (key != null) {
+                                databaseReference.child(key).setValue(url);
+                            }
                         }
 
-                        // IMPORTANTE: Ejecutar cambios de UI en el hilo principal
-                        // Esto evita que la app se cierre (crash) por tocar la UI desde background
+                        // 2. Actualizar la Interfaz (OBLIGATORIO USAR runOnUiThread)
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                dialog.dismiss();
-                                Toast.makeText(MainActivity.this, "Imagen subida correctamente", Toast.LENGTH_LONG).show();
+                                // Verificamos que la actividad siga viva antes de cerrar el dialogo
+                                if (!isFinishing() && !isDestroyed()) {
+                                    dialog.dismiss();
+                                    Toast.makeText(MainActivity.this, "Imagen guardada con éxito", Toast.LENGTH_LONG).show();
 
-                                // Opcional: Reiniciar la vista para subir otra
-                                imgPreview.setImageResource(android.R.drawable.ic_menu_gallery);
-                                imagenUri = null;
+                                    // Reiniciar vista
+                                    imgPreview.setImageResource(android.R.drawable.ic_menu_gallery);
+                                    imagenUri = null;
+                                }
                             }
                         });
                     }
 
                     @Override
                     public void onError(String requestId, ErrorInfo error) {
-                        // IMPORTANTE: Ejecutar cambios de UI en el hilo principal
+                        // También usamos runOnUiThread para el error
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                dialog.dismiss();
-                                Toast.makeText(MainActivity.this, "Error: "+ error.getDescription(), Toast.LENGTH_LONG).show();
+                                if (!isFinishing() && !isDestroyed()) {
+                                    dialog.dismiss();
+                                    Toast.makeText(MainActivity.this, "Error: " + error.getDescription(), Toast.LENGTH_LONG).show();
+                                }
                             }
                         });
                     }
 
                     @Override
-                    public void onReschedule(String requestId, ErrorInfo error) {
-                        // Manejo de reprogramación si es necesario
-                    }
+                    public void onReschedule(String requestId, ErrorInfo error) { }
                 })
                 .dispatch();
     }
