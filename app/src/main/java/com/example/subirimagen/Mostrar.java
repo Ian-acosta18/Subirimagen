@@ -26,18 +26,32 @@ public class Mostrar extends AppCompatActivity { // Nombre de clase con Mayúscu
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        contenedor.removeAllViews();
+                        contenedor.removeAllViews(); // Limpia la lista antes de agregar nuevas
 
                         for (DataSnapshot ds : snapshot.getChildren()){
                             String url = ds.getValue(String.class);
 
-                            if (url != null) { // Verificación de nulo
+                            if (url != null) {
                                 ImageView img = new ImageView(Mostrar.this);
-                                img.setAdjustViewBounds(true);
+
+                                // 1. IMPORTANTE: Definir LayoutParams para que la imagen tenga tamaño
+                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT, // Ancho: ocupa todo
+                                        LinearLayout.LayoutParams.WRAP_CONTENT  // Alto: se ajusta a la imagen
+                                );
+                                params.setMargins(0, 0, 0, 30); // Margen inferior para separar imágenes
+                                img.setLayoutParams(params);
+
+                                // 2. Configuración de la imagen
+                                img.setAdjustViewBounds(true); // Permite que el alto se ajuste a la imagen
+                                img.setScaleType(ImageView.ScaleType.FIT_CENTER);
                                 img.setPadding(10,10,10,10);
 
-                                Glide.with(Mostrar.this).load(url).into(img);
+                                // 3. Cargar con Glide
+                                Glide.with(Mostrar.this)
+                                        .load(url)
+                                        .placeholder(R.drawable.ic_launcher_background) // (Opcional) Muestra algo mientras carga
+                                        .into(img);
 
                                 contenedor.addView(img);
                             }
